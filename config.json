@@ -1,0 +1,38 @@
+[
+	{
+		"req": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
+		"res": "http://resource.bessystem.com:8899/datacool-dvc2/console/assets/img/logotop.c5a78adb.svg",
+		"checked": true,
+		"group": "group1"
+	},
+	{
+		"req": ".*logo.png",
+		"res": "http://resource.bessystem.com:8899/datacool-dvc2/console/assets/img/logotop.c5a78adb.svg",
+		"checked": true,
+		"group": "group1"
+	},
+	{
+		"req": "https://www.baidu.com/img/flexible/logo/pc/result.png",
+		"res": "http://resource.bessystem.com:8899/datacool-dvc2/console/assets/img/logotop.c5a78adb.svg",
+		"checked": true,
+		"group": "group1"
+	},
+	{
+		"req": ".*logo.svg",
+		"res": "http://resource.bessystem.com:8899/datacool-dvc2/console/assets/img/logotop.c5a78adb.svg",
+		"checked": true,
+		"group": "group1"
+	},
+	{
+		"req": ".*logo.jpg",
+		"res": "http://resource.bessystem.com:8899/datacool-dvc2/console/assets/img/logotop.c5a78adb.svg",
+		"checked": true,
+		"group": "group1"
+	},
+	{
+		"req": "http://www.tongtech.com/",
+		"res": "403",
+		"checked": true,
+		"group": "forbid"
+	}
+]

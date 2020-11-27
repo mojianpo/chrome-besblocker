@@ -1,0 +1,38 @@
+{
+    "name": "BesBlocker",
+    "version": "1.0.0",
+    "description": "Change the response of the request. 用来更改页面请求响应的内容。通过指定规则，您可以把请求映射到其他的URL。",
+    "manifest_version": 2,
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_title": "BES Blocker",
+        "default_popup": "popup.html"
+    },
+    "options_page": "options.html",
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "icons":
+    {
+        "16": "icon16.png",
+        "32": "icon32.png",
+        "48": "icon48.png",
+        "64": "icon64.png",
+        "72": "icon72.png",
+        "128": "icon128.png"
+    },
+    "permissions": [
+        "tabs",
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>",
+        "unlimitedStorage",
+        "activeTab", 
+        "webNavigation", 
+        "management", 
+        "http://*/*", 
+        "https://*/*"
+    ],
+    "update_url": "https://www.bessystem.com/product/cbcaf2c2488043bebed4c06f2833e3f3/info?p=101"
+} 
