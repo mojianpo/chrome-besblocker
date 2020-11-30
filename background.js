@@ -46,14 +46,15 @@ function getLocalFileUrl(url) {
 
 chrome.webRequest.onBeforeRequest.addListener(function (request) {
         var url = request.url;
-        var items = getBesBlockMap()
+        var items = getBesBlockMap();
+        var flag = false;
         for (var i = 0, len = items.length; i < len; i++) {
             var item = items[i];
             if(item.checked){
                 if(url === item.req && !/^file:\/\//.test(item.res)){
                     url = item.res
+                    flag = true;
                 }else {
-                    
                     var reg = new RegExp(item.req, 'gi');
                     if (typeof item.res === 'string' && reg.test(url)) {
                         if (!/^file:\/\//.test(item.res)) {
@@ -65,12 +66,14 @@ chrome.webRequest.onBeforeRequest.addListener(function (request) {
                                 url = getLocalFileUrl(url.replace(reg, item.res));
                             } while (reg.test(url))
                         }
+                        flag = true;
                     }
                    
                }
            }
         }
-        if((url === '403' || url === '400' || url === '500')){
+        
+        if(flag && (url === '403' || url === '400' || url === '500')){
             return {redirectUrl: chrome.extension.getURL("403.html")};
         }
         return url === request.url ? {} : { redirectUrl: url };

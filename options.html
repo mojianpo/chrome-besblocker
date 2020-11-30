@@ -24,6 +24,11 @@
     <div style="display:{{editDisplay}};" class="editBox">
         <button type="button" class="close" aria-hidden="true" ng-click="hideEditBox()">&times;</button>
         <div class="errorMsg">{{inputError}}</div>
+        
+        <div class="form-group">
+            <label for="req"></label>启用:</label>
+            <input type="checkbox" class="form-control" id="req" ng-model="curRule.checked"/>
+        </div>
         <div class="form-group">
             <label for="req">请求URL(Match):</label>
             <input type="text" class="form-control" id="req" ng-model="curRule.req"/>
@@ -59,7 +64,7 @@
                         <tbody>
                             <tr ng-repeat="rule in rulesMap track by $index">
                                 <td ng-if="$index === 0" rowspan="{{rulesMap.length}}" style="width: 140px;vertical-align: middle;border-right: 1px solid #ddd;background: #fff;">{{group || group === unidefined || '未命名'}}</td>
-                                <td><input type="checkbox" ng-model="rule.checked"/></td>
+                                <td>{{rule.checked}}</td>
                                 <td><div title="{{rule.req}}">{{rule.req}}</div></td>
                                 <td><div title="{{rule.res}}">{{rule.res}}</div></td>
                                 <!--<td>{{rule.type == "file" ? "URL映射" : "目录映射"}}</td>-->

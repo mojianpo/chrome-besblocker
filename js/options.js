@@ -29,6 +29,8 @@ besblocker.controller('mapListCtrl', function($scope) {
     var bg = chrome.extension.getBackgroundPage();
     //保存规则数据到localStorage
     function saveData() {
+        debugger
+        console.log($scope.maps)
         $scope.rules = groupBy($scope.maps, 'group');
         setBesBlockMap($scope.maps);
     }
@@ -116,6 +118,11 @@ besblocker.controller('mapListCtrl', function($scope) {
                 $scope.maps.splice(i, 1);
             }
         }
+        saveData();
+    }
+
+    // 保存
+    $scope.saveAll = function(){
         saveData();
     }
 
