@@ -13,8 +13,7 @@
         "scripts": ["background.js"],
         "persistent": true
     },
-    "icons":
-    {
+    "icons": {
         "16": "icon16.png",
         "32": "icon32.png",
         "48": "icon48.png",
@@ -22,17 +21,26 @@
         "72": "icon72.png",
         "128": "icon128.png"
     },
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["js/custom.js"],
+        "css": ["css/custom.css"],
+        "run_at": "document_start"
+    }],
     "permissions": [
+        "declarativeContent",
+        "storage",
         "tabs",
         "webRequest",
         "webRequestBlocking",
         "<all_urls>",
         "unlimitedStorage",
-        "activeTab", 
-        "webNavigation", 
-        "management", 
-        "http://*/*", 
+        "activeTab",
+        "webNavigation",
+        "management",
+        "http://*/*",
         "https://*/*"
     ],
+    "web_accessible_resources": ["js/inject.js"],
     "update_url": "https://www.bessystem.com/product/cbcaf2c2488043bebed4c06f2833e3f3/info?p=101"
-} 
+}

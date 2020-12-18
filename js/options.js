@@ -1,9 +1,10 @@
 'use strict';
 var besblocker = angular.module('besblocker', []);
 
-var groupBy = function (collects, name) {
-    var ret = {}, key;
-    if(collects){
+var groupBy = function(collects, name) {
+    var ret = {},
+        key;
+    if (collects) {
         collects.forEach(function(elem) {
             var key = elem[name];
             ret[key] = ret[key] || [];
@@ -12,27 +13,45 @@ var groupBy = function (collects, name) {
     }
     return ret;
 }
+
 function getBesBlockMap() {
     let data = localStorage.getItem("BesBlockerMap") || '';
-    if(data){
+    if (data) {
         return JSON.parse(data) || []
     } else {
         return []
-    } 
+    }
+}
+
+function getBesInsertJs() {
+    let data = localStorage.getItem("BesInsertJs") || '';
+    return data
+}
+
+function getBeskvMap() {
+    let data = localStorage.getItem("BeskvMap") || '{}';
+    return data
 }
 
 function setBesBlockMap(arr) {
     localStorage.setItem("BesBlockerMap", JSON.stringify(arr));
 }
 
+function setKeyValue(key, value) {
+    localStorage.setItem(key, value);
+}
+
 besblocker.controller('mapListCtrl', function($scope) {
     var bg = chrome.extension.getBackgroundPage();
     //保存规则数据到localStorage
     function saveData() {
-        debugger
-        console.log($scope.maps)
         $scope.rules = groupBy($scope.maps, 'group');
         setBesBlockMap($scope.maps);
+    }
+
+    function saveInsertData() {
+        setKeyValue("BesInsertJs", $scope.insertJs);
+        setKeyValue("BeskvMap", $scope.beskvMap);
     }
 
     //当前编辑的规则
@@ -45,6 +64,11 @@ besblocker.controller('mapListCtrl', function($scope) {
     $scope.maps = getBesBlockMap();
     $scope.rules = groupBy($scope.maps, 'group');
 
+    $scope.beskvMap = getBeskvMap();
+
+    // 编辑插入js css
+    $scope.insertJs = getBesInsertJs()
+
     //编辑框显示状态
     $scope.editDisplay = 'none';
 
@@ -55,19 +79,26 @@ besblocker.controller('mapListCtrl', function($scope) {
     $scope.inputError = '';
 
     //隐藏编辑框
-    $scope.hideEditBox = function () {
+    $scope.hideEditBox = function() {
         $scope.editDisplay = 'none';
     }
 
+    // 保存插入数据
+    $scope.saveInsertData = function() {
+        saveInsertData()
+        saveBeskvMap()
+    }
+
+
     //验证输入合法性
-    $scope.virify = function () {
+    $scope.virify = function() {
         if (!$scope.curRule.req) {
             $scope.inputError = '正则一栏输入不能为空';
             return false;
         }
         try {
             new RegExp($scope.curRule.req);
-        } catch (e){
+        } catch (e) {
             $scope.inputError = 'req正则格式错误';
             return false;
         }
@@ -76,12 +107,12 @@ besblocker.controller('mapListCtrl', function($scope) {
     }
 
     // 点击添加按钮
-    $scope.addRule = function () {
+    $scope.addRule = function() {
         if ($scope.editDisplay === 'none') {
             $scope.curRule = {
                 req: '.*test\\.com',
                 res: '',
-//                type: 'file',
+                //                type: 'file',
                 checked: true
             };
             $scope.editType = '添加';
@@ -92,15 +123,15 @@ besblocker.controller('mapListCtrl', function($scope) {
     };
 
     //点击编辑按钮
-    $scope.edit = function (rule) {
+    $scope.edit = function(rule) {
         $scope.curRule = rule;
         $scope.editType = '编辑';
         $scope.editDisplay = 'block';
     }
 
     //编辑后保存
-    $scope.saveRule = function () {
-        if ( $scope.virify() ) {
+    $scope.saveRule = function() {
+        if ($scope.virify()) {
             if ($scope.editType === '添加') {
                 $scope.maps.push($scope.curRule);
             } else {
@@ -112,8 +143,8 @@ besblocker.controller('mapListCtrl', function($scope) {
     };
 
     //删除规则
-    $scope.removeUrl = function (rule) {
-        for (var i = 0, len = $scope.maps.length; i< len; i++) {
+    $scope.removeUrl = function(rule) {
+        for (var i = 0, len = $scope.maps.length; i < len; i++) {
             if ($scope.maps[i] === rule) {
                 $scope.maps.splice(i, 1);
             }
@@ -122,12 +153,12 @@ besblocker.controller('mapListCtrl', function($scope) {
     }
 
     // 保存
-    $scope.saveAll = function(){
+    $scope.saveAll = function() {
         saveData();
     }
 
     //导出
-    $scope.export = function () {
+    $scope.export = function() {
         function saveAs(blob, filename) {
             var type = blob.type;
             var force_saveable_type = 'application/octet-stream';
@@ -148,17 +179,17 @@ besblocker.controller('mapListCtrl', function($scope) {
         }
 
         var URL = URL || webkitURL || window;
-        var bb = new Blob([JSON.stringify($scope.maps, null, '\t')], {type: 'text/json'});
+        var bb = new Blob([JSON.stringify($scope.maps, null, '\t')], { type: 'text/json' });
         saveAs(bb, 'config.json');
     }
 
     //导入
-    document.getElementById('jsonFile').onchange = function () {
+    document.getElementById('jsonFile').onchange = function() {
         var resultFile = this.files[0];
         if (resultFile) {
             var reader = new FileReader();
             reader.readAsText(resultFile);
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 try {
                     var data = JSON.parse(this.result);
                     $scope.maps.length = 0;
@@ -174,4 +205,3 @@ besblocker.controller('mapListCtrl', function($scope) {
         }
     }
 });
-
